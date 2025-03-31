@@ -1,26 +1,37 @@
-# KiranaWala - Local Store Management System
+# KiranaWala - Online Grocery Management System
 
-## Overview
-KiranaWala is a web application that connects local store owners with customers, enabling online store management and shopping experience.
+A web-based platform connecting local store owners with customers for convenient online grocery shopping.
 
 ## Features
 
-### Customer Features
-- Registration and login system
+### For Customers
+- User registration and authentication
 - Browse local stores
-- View store products and details
-- User-friendly dashboard
+- View store products
+- Place orders online
 
-### Store Owner Features
-- Store registration and login
-- Store profile management
-- Product management
-- Store category selection
+### For Store Owners
+- Store registration and management
+- Product inventory management
+- Order management
+- Store profile customization
 
-## Technical Stack
-- Frontend: HTML, CSS, JavaScript
-- Backend: Node.js with Express.js
-- Database: MongoDB
-- Authentication: JWT
+## Tech Stack
 
-## Project Structure
+- **Frontend**: HTML, CSS, JavaScript
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB
+- **Authentication**: JWT
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v14 or higher)
+- MongoDB
+- npm
+
+### Installation
+
+1. Clone the repository
+```bash
+git clone https://github.com/yourusername/kiranawala.git
