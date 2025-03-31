@@ -120,6 +120,8 @@ KiranaWala/
 
 
 ## Contact
+
 Jaineesh - jaineeshpatel73@gmail.com
-Project Link: [https://github.com/jaineeshx/KiranaWala/tree/main]
+
+Project Link: [https://github.com/jaineeshx/KiranaWala]
 
