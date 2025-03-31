@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Store Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h2>Store Dashboard</h2>
+                <button id="addProductBtn" onclick="showAddProductModal()">
+                    <i class="fas fa-plus"></i> Add Product
+                </button>
+            </div>
+            <button id="logoutBtn" onclick="logout()">Logout</button>
+        </header>
+
+        <div class="products-grid" id="productsList">
+            <!-- Products will be loaded here -->
+        </div>
+
+        <!-- Add Product Modal -->
+        <div id="addProductModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeModal()">&times;</span>
+                <h3>Add New Product</h3>
+                <form id="addProductForm">
+                    <input type="text" id="productName" placeholder="Product Name" required>
+                    <input type="number" id="productPrice" placeholder="Price" required>
+                    <textarea id="productDescription" placeholder="Product Description" required></textarea>
+                    <input type="text" id="productImage" placeholder="Image URL" required>
+                    <button type="submit">Add Product</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Edit Product Modal -->
+        <div id="editProductModal" class="modal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeEditModal()">&times;</span>
+                <h3>Edit Product</h3>
+                <form id="editProductForm">
+                    <input type="hidden" id="editProductId">
+                    <input type="text" id="editProductName" placeholder="Product Name" required>
+                    <input type="number" id="editProductPrice" placeholder="Price" required>
+                    <textarea id="editProductDescription" placeholder="Product Description" required></textarea>
+                    <input type="text" id="editProductImage" placeholder="Image URL" required>
+                    <button type="submit">Update Product</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div id="deleteModal" class="modal">
+            <div class="modal-content">
+                <h3>Confirm Delete</h3>
+                <p>Are you sure you want to delete this product?</p>
+                <div class="modal-actions">
+                    <button onclick="confirmDelete()" class="delete-btn">Delete</button>
+                    <button onclick="closeDeleteModal()" class="cancel-btn">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProductId = null;
+
+        // Modal functions
+        function showAddProductModal() {
+            document.getElementById('addProductModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('addProductModal').style.display = 'none';
+            document.getElementById('addProductForm').reset();
+        }
+
+        function closeEditModal() {
+            document.getElementById('editProductModal').style.display = 'none';
+            document.getElementById('editProductForm').reset();
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+            currentProductId = null;
+        }
+
+        // Products CRUD operations
+        async function loadProducts() {
+            try {
+                const storeId = localStorage.getItem('storeId');
+                const response = await fetch(`/api/store/products/${storeId}`);
+                const products = await response.json();
+                displayProducts(products);
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
+        function displayProducts(products) {
+            const productsList = document.getElementById('productsList');
+            productsList.innerHTML = products.map(product => `
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-info">
+                        <h3>${product.name}</h3>
+                        <p class="product-price">₹${product.price}</p>
+                        <p class="product-description">${product.description}</p>
+                        <div class="product-actions">
+                            <button onclick="editProduct('${product._id}')" class="edit-btn">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button onclick="showDeleteConfirmation('${product._id}')" class="delete-btn">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function editProduct(productId) {
+            try {
+                const storeId = localStorage.getItem('storeId');
+                const response = await fetch(`/api/store/products/${productId}`);
+
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch product');
+                }
+                
+                const product = await response.json();
+                console.log('Product data:', product); // For debugging
+                
+                document.getElementById('editProductId').value = productId || "";
+                document.getElementById('editProductName').value = product.name || "";
+                document.getElementById('editProductPrice').value = product.price || "";
+                document.getElementById('editProductDescription').value = product.description || "";
+                document.getElementById('editProductImage').value = product.image || "";
+                
+                document.getElementById('editProductModal').style.display = 'block';
+            } catch (error) {
+                console.error('Error loading product:', error);
+                alert('Failed to load product details');
+            }
+        }
+
+        document.getElementById('editProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const productId = document.getElementById('editProductId').value;
+            const storeId = localStorage.getItem('storeId');
+            
+            try {
+                const response = await fetch(`/api/store/products/${productId}`, {
+
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: document.getElementById('editProductName').value,
+                        price: parseFloat(document.getElementById('editProductPrice').value),
+                        description: document.getElementById('editProductDescription').value,
+                        image: document.getElementById('editProductImage').value
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.message || 'Failed to update product');
+                }
+
+                closeEditModal();
+                loadProducts();
+            } catch (error) {
+                console.error('Error updating product:', error);
+                alert(error.message || 'Failed to update product');
+            }
+        });
+
+        function showDeleteConfirmation(productId) {
+            currentProductId = productId;
+            document.getElementById('deleteModal').style.display = 'block';
+        }
+
+        async function confirmDelete() {
+            if (currentProductId) {
+                try {
+                    const storeId = localStorage.getItem('storeId');
+                    const response = await fetch(`/api/store/products/${currentProductId}/${storeId}`, {
+                        method: 'DELETE'
+                    });
+                    if (response.ok) {
+                        loadProducts();
+                        closeDeleteModal();
+                    }
+                } catch (error) {
+                    console.error('Error deleting product:', error);
+                    alert('Failed to delete product');
+                }
+            }
+        }
+
+        // Event Listeners
+        document.getElementById('addProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                const response = await fetch('/api/store/products', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: document.getElementById('productName').value,
+                        price: parseFloat(document.getElementById('productPrice').value),
+                        description: document.getElementById('productDescription').value,
+                        image: document.getElementById('productImage').value,
+                        storeId: localStorage.getItem('storeId')
+                    })
+                });
+
+                if (response.ok) {
+                    closeModal();
+                    loadProducts();
+                } else {
+                    const error = await response.json();
+                    alert(error.message);
+                }
+            } catch (error) {
+                console.error('Error adding product:', error);
+                alert('Failed to add product');
+            }
+        });
+
+        // document.getElementById('editProductForm').addEventListener('submit', async (e) => {
+        //     e.preventDefault();
+        //     const productId = document.getElementById('editProductId').value;
+        //     const storeId = localStorage.getItem('storeId');
+            
+        //     try {
+        //         const response = await fetch(`/api/store/products/${productId}/${storeId}`, {
+        //             method: 'PUT',
+        //             headers: {
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             body: JSON.stringify({
+        //                 name: document.getElementById('editProductName').value,
+        //                 price: parseFloat(document.getElementById('editProductPrice').value),
+        //                 description: document.getElementById('editProductDescription').value,
+        //                 image: document.getElementById('editProductImage').value
+        //             })
+        //         });
+
+        //         if (response.ok) {
+        //             closeEditModal();
+        //             loadProducts();
+        //         } else {
+        //             const error = await response.json();
+        //             alert(error.message);
+        //         }
+        //     } catch (error) {
+        //         console.error('Error updating product:', error);
+        //         alert('Failed to update product');
+        //     }
+        // });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            const storeId = localStorage.getItem('storeId');
+            if (!storeId) {
+                window.location.href = '/store-owner/login';
+                return;
+            }
+            loadProducts();
+        });
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/'; // Changed this line to redirect to index page
+        }
+    </script>
+</body>
+</html>

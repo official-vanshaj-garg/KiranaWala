@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="dashboard-header">
+            <div class="header-content">
+                <h2>Discover Stores</h2>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search stores...">
+                </div>
+            </div>
+            <button id="logoutBtn" onclick="logout()">Logout</button>
+        </header>
+        
+        <div class="stores-grid" id="storesList">
+            <!-- Stores will be loaded here -->
+        </div>
+    </div>
+
+    <script>
+        const dummyStores = [
+            {
+                _id: '1',
+                name: 'Electronics Hub',
+                owner: { username: 'John Doe' },
+                image: 'https://picsum.photos/400/300?random=1',
+                description: 'Best electronics store in town',
+                rating: 4.5,
+                category: 'Electronics'
+            },
+            {
+                _id: '2',
+                name: 'Fashion Paradise',
+                owner: { username: 'Jane Smith' },
+                image: 'https://picsum.photos/400/300?random=2',
+                description: 'Trendy fashion for everyone',
+                rating: 4.8,
+                category: 'Fashion'
+            },
+            {
+                _id: '3',
+                name: 'Home Decor Plus',
+                owner: { username: 'Mike Johnson' },
+                image: 'https://picsum.photos/400/300?random=3',
+                description: 'Make your home beautiful',
+                rating: 4.3,
+                category: 'Home & Living'
+            },
+            {
+                _id: '4',
+                name: 'Grocery Store',
+                owner: { username: 'Sarah Wilson' },
+                image: 'https://picsum.photos/400/300?random=4',
+                description: 'Fresh groceries daily',
+                rating: 4.6,
+                category: 'Grocery'
+            }
+        ];
+
+        function displayStores(stores) {
+            const storesList = document.getElementById('storesList');
+            storesList.innerHTML = stores.map(store => `
+                <div class="store-card">
+                    <div class="store-image">
+                        <img src="${store.image}" alt="${store.name}">
+                        <div class="store-category-tag">${store.category}</div>
+                    </div>
+                    <div class="store-info">
+                        <h3>${store.name}</h3>
+                        <p class="store-description">${store.description}</p>
+                        <div class="store-meta">
+                            <span class="store-rating">★ ${store.rating}</span>
+                            <span class="store-owner">by ${store.owner.username}</span>
+                        </div>
+                        <button onclick="viewProducts('${store._id}')" class="view-products-btn">View Products</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        displayStores(dummyStores);
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/'; // Changed this line to redirect to index page
+        }
+    </script>
+</body>
+</html>
