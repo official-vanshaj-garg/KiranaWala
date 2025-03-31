@@ -1,6 +1,6 @@
 # KiranaWala - Online Grocery Management System
 
-A web-based platform connecting local store owners with customers for convenient online grocery shopping.
+KiranaWala is a web-based platform connecting local store owners with customers for convenient online grocery shopping.
 
 ## Features
 
@@ -48,23 +48,44 @@ A web-based platform connecting local store owners with customers for convenient
    ```
 4. Start the server:
    ```bash
-   npm start
+   node server/server.js
    ```
 5. The application will be available at `http://localhost:3000`
 
 ## Project Structure
 ```
 KiranaWala/
-│── backend/
+│── node_modules/
+│── public/
+│   ├── css/
+│   │   ├── styles.css
+│   ├── images/
+│   │   ├── auth/
+│   │   ├── store-background.jpg
+│   ├── js/
+│   │   ├── customer.js
+│   │   ├── store-owner.js
+│   │   ├── store-owner-dashboard.js
+│── server/
 │   ├── models/
+│   │   ├── product.js
+│   │   ├── store.js
+│   │   ├── storeOwner.js
+│   │   ├── user.js
 │   ├── routes/
-│   ├── controllers/
-│   ├── config/
-│   └── server.js
-│── frontend/
-│   ├── index.html
-│   ├── styles.css
-│   ├── script.js
+│   │   ├── customerRoutes.js
+│   │   ├── storeRoutes.js
+│   │   ├── server.js
+│── views/
+│   ├── customer/
+│   │   ├── dashboard.html
+│   │   ├── login.html
+│   │   ├── register.html
+│   ├── store-owner/
+│   │   ├── dashboard.html
+│   │   ├── login.html
+│   │   ├── register.html
+│   │   ├── index.html
 │── .env
 │── package.json
 │── README.md
@@ -97,8 +118,10 @@ KiranaWala/
    ```
 5. Open a Pull Request
 
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contact
-E-Mail : jaineeshpatel73@gmail.com  
+Jaineesh - jaineeshpatel73@gmail.com
 Project Link: [https://github.com/jaineeshx/KiranaWala/tree/main]
 
