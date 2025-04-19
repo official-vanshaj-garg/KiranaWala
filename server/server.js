@@ -2,9 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
-require('dotenv').config();
+// Specify the path to the .env file relative to this server.js file
+require('dotenv').config({ path: path.resolve(__dirname, '.env') }); 
 const customerRoutes = require('./routes/customerRoutes');
 const storeRoutes = require('./routes/storeRoutes');
+// const uri = "mongodb+srv://pateljaineesh08:wXvUcSbx1lDGx4a9@kiranawala.3r8ka.mongodb.net/KiranaWala?retryWrites=true&w=majority"; // Remove this line
 
 const app = express();
 
@@ -15,7 +17,8 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.static(path.join(__dirname, '../views')));
 
 // MongoDB Connection
-mongoose.connect(process.env.MONGODB_URI, {
+// Now process.env.MONGODB_URI should be correctly loaded from e:\KiranaWala\server\.env
+mongoose.connect(process.env.MONGODB_URI, { 
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
@@ -23,6 +26,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 }).catch((err) => {
     console.error('MongoDB connection error:', err);
 });
+
 
 // API Routes
 app.use('/api/customer', customerRoutes);
@@ -57,7 +61,12 @@ app.get('/store-owner/dashboard', (req, res) => {
     res.sendFile(path.join(__dirname, '../views/store-owner/dashboard.html'));
 });
 
-const PORT = process.env.PORT || 3000;
+// Add this with your other routes
+app.get('/customer/products', (req, res) => {
+    res.sendFile(path.join(__dirname, '../views/customer/products.html'));
+});
+
+const PORT = process.env.PORT || 3000; // Already using process.env here, which is good
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

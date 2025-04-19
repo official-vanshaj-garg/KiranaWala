@@ -156,4 +156,28 @@ router.delete('/products/:productId/:storeId', async (req, res) => {
     }
 });
 
+router.get('/all', async (req, res) => {
+    try {
+        const stores = await StoreOwner.find({}, {
+            'username': 1,
+            'email': 1,
+            'store': 1
+        });
+        res.json(stores);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+
+// Add this new route
+router.get('/:storeId/products', async (req, res) => {
+    try {
+        const products = await Product.find({ store: req.params.storeId });
+        res.json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 module.exports = router;

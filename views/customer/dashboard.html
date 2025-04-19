@@ -21,75 +21,71 @@
         <div class="stores-grid" id="storesList">
             <!-- Stores will be loaded here -->
         </div>
+
+        <div id="stores-container">
+            <!-- Stores will be dynamically loaded here -->
+        </div>
     </div>
 
     <script>
-        const dummyStores = [
-            {
-                _id: '1',
-                name: 'Electronics Hub',
-                owner: { username: 'John Doe' },
-                image: 'https://picsum.photos/400/300?random=1',
-                description: 'Best electronics store in town',
-                rating: 4.5,
-                category: 'Electronics'
-            },
-            {
-                _id: '2',
-                name: 'Fashion Paradise',
-                owner: { username: 'Jane Smith' },
-                image: 'https://picsum.photos/400/300?random=2',
-                description: 'Trendy fashion for everyone',
-                rating: 4.8,
-                category: 'Fashion'
-            },
-            {
-                _id: '3',
-                name: 'Home Decor Plus',
-                owner: { username: 'Mike Johnson' },
-                image: 'https://picsum.photos/400/300?random=3',
-                description: 'Make your home beautiful',
-                rating: 4.3,
-                category: 'Home & Living'
-            },
-            {
-                _id: '4',
-                name: 'Grocery Store',
-                owner: { username: 'Sarah Wilson' },
-                image: 'https://picsum.photos/400/300?random=4',
-                description: 'Fresh groceries daily',
-                rating: 4.6,
-                category: 'Grocery'
+        // Load all stores when the page loads
+        document.addEventListener('DOMContentLoaded', loadStores);
+    
+        // Function to fetch and load all stores
+        async function loadStores() {
+            try {
+                const response = await fetch('/api/store/all');
+                const stores = await response.json();
+                displayStores(stores);
+            } catch (error) {
+                console.error('Error loading stores:', error);
             }
-        ];
-
+        }
+    
+        // Function to render all the stores on the page
         function displayStores(stores) {
-            const storesList = document.getElementById('storesList');
-            storesList.innerHTML = stores.map(store => `
+            const storesContainer = document.getElementById('stores-container');
+            storesContainer.innerHTML = stores.map(store => createStoreCard(store)).join('');
+        }
+    
+        // Function to generate HTML for a single store card
+        function createStoreCard(store) {
+            const imageUrl = store.store?.image || `https://picsum.photos/400/300?random=${Math.random()}`;
+            const category = store.store?.category || 'General';
+            const name = store.store?.name || `${store.username}'s Store`;
+            const description = store.store?.description || 'Welcome to our store!';
+            const rating = store.store?.rating || '4.0';
+    
+            return `
                 <div class="store-card">
                     <div class="store-image">
-                        <img src="${store.image}" alt="${store.name}">
-                        <div class="store-category-tag">${store.category}</div>
+                        <img src="${imageUrl}" alt="${store.username}'s Store">
+                        <div class="store-category-tag">${category}</div>
                     </div>
                     <div class="store-info">
-                        <h3>${store.name}</h3>
-                        <p class="store-description">${store.description}</p>
+                        <h3>${name}</h3>
+                        <p class="store-description">${description}</p>
                         <div class="store-meta">
-                            <span class="store-rating">★ ${store.rating}</span>
-                            <span class="store-owner">by ${store.owner.username}</span>
+                            <span class="store-rating">★ ${rating}</span>
+                            <span class="store-owner">by ${store.username}</span>
                         </div>
                         <button onclick="viewProducts('${store._id}')" class="view-products-btn">View Products</button>
                     </div>
                 </div>
-            `).join('');
+            `;
+
         }
 
-        displayStores(dummyStores);
-
+        function viewProducts(storeId) {
+            window.location.href = `/customer/products?storeId=${storeId}`;
+        }
+    
+        // Function to log out the user
         function logout() {
             localStorage.removeItem('token');
-            window.location.href = '/'; // Changed this line to redirect to index page
+            window.location.href = '/';
         }
     </script>
+    
 </body>
 </html>
