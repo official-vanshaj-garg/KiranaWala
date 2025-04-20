@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 // Add bcrypt require statement
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs"); // Make sure bcrypt is required
 // Define salt factor
 const SALT_WORK_FACTOR = 10; // Standard salt rounds for bcrypt
 
@@ -47,32 +47,25 @@ const storeOwnerSchema = new mongoose.Schema({
 });
 
 // --- Add the pre-save hook here ---
+// Hash password before saving
 storeOwnerSchema.pre("save", async function (next) {
-  const owner = this; // 'this' refers to the document being saved
-
   // Only hash the password if it has been modified (or is new)
-  if (!owner.isModified("password")) return next();
-
-  try {
-    // Generate a salt
-    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR);
-    // Hash the password using the new salt
-    const hash = await bcrypt.hash(owner.password, salt);
-    // Override the cleartext password with the hashed one
-    owner.password = hash;
-    next(); // Proceed with saving
-  } catch (err) {
-    next(err); // Pass errors to Mongoose
+  if (!this.isModified("password")) {
+    return next(); // Exit early if password hasn't changed
   }
+
+  // --- Start of code that was inside the try block ---
+  const salt = await bcrypt.genSalt(10); // Generate salt
+  this.password = await bcrypt.hash(this.password, salt); // Hash the password
+  // No need to call next() here for async hooks unless returning early
+  // --- End of code that was inside the try block ---
+
+  // The try { ... } catch(error) { next(error); } wrapper should be completely gone.
 });
 
-// Optional: Add the comparePassword method
+// Method to compare password
 storeOwnerSchema.methods.comparePassword = async function (candidatePassword) {
-  try {
-    return await bcrypt.compare(candidatePassword, this.password);
-  } catch (error) {
-    throw error; // Re-throw error for handling elsewhere
-  }
+  return await bcrypt.compare(candidatePassword, this.password);
 };
 // --- End of added code ---
 
