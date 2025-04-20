@@ -200,4 +200,35 @@ router.get("/:storeId/products", async (req, res) => {
   }
 });
 
+// Example: Assuming it's in a catch block like this
+someAsyncFunction().catch(error => { // Original line
+    console.error("Something went wrong"); // Using console, but not the 'error' variable
+    res.status(500).json({ message: 'Server error' });
+});
+
+// Change it to:
+someAsyncFunction().catch(_error => { // Rename 'error' to '_error'
+  
+    console.error("Something went wrong");
+    res.status(500).json({ message: 'Server error' });
+});
+
+// OR if it's in middleware like this:
+app.use((error, req, res, next) => { // Original line
+    console.error("Unhandled error:", error.stack); // Using 'error' here
+    res.status(500).send('Something broke!');
+});
+// If 'error' *is* used (like above), the lint error shouldn't occur.
+// If 'error' is NOT used, like this:
+app.use((error, req, res, next) => { // Original line
+    console.error("An error occurred!"); // Not using 'error' variable
+    res.status(500).send('Something broke!');
+});
+// Change it to:
+app.use((_error, req, res, next) => { // Rename 'error' to '_error'
+    console.error("An error occurred!");
+    res.status(500).send('Something broke!');
+});
+
+
 module.exports = router;
