@@ -82,9 +82,7 @@ router.post("/login", async (req, res) => {
     });
 
     res.json({ token, storeId: storeOwner._id });
-  } catch (_error) {
-    // Rename 'error' to '_error' here
-    // The original 'error' variable was not used in the line below
+  } catch {
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -197,8 +195,8 @@ router.get("/:storeId/products", async (req, res) => {
   try {
     const products = await Product.find({ store: req.params.storeId });
     res.json(products);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  } catch {
+    res.status(500).json({ message: "Server error" });
   }
 });
 

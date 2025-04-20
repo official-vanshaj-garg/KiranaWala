@@ -1,8 +1,5 @@
 const mongoose = require("mongoose");
-// Add bcrypt require statement
-const bcrypt = require("bcryptjs"); // Make sure bcrypt is required
-// Define salt factor
-const SALT_WORK_FACTOR = 10; // Standard salt rounds for bcrypt
+const bcrypt = require("bcryptjs");
 
 const storeOwnerSchema = new mongoose.Schema({
   username: {
