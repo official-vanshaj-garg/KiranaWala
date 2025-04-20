@@ -82,7 +82,9 @@ router.post("/login", async (req, res) => {
     });
 
     res.json({ token, storeId: storeOwner._id });
-  } catch (error) {
+  } catch (_error) {
+    // Rename 'error' to '_error' here
+    // The original 'error' variable was not used in the line below
     res.status(500).json({ message: "Server error" });
   }
 });
@@ -200,35 +202,41 @@ router.get("/:storeId/products", async (req, res) => {
   }
 });
 
+// DELETE ALL THE CODE FROM HERE ...
 // Example: Assuming it's in a catch block like this
-someAsyncFunction().catch(error => { // Original line
-    console.error("Something went wrong"); // Using console, but not the 'error' variable
-    res.status(500).json({ message: 'Server error' });
+someAsyncFunction().catch((error) => {
+  // Original line
+  console.error("Something went wrong"); // Using console, but not the 'error' variable
+  res.status(500).json({ message: "Server error" });
 });
 
 // Change it to:
-someAsyncFunction().catch(_error => { // Rename 'error' to '_error'
-  
-    console.error("Something went wrong");
-    res.status(500).json({ message: 'Server error' });
+someAsyncFunction().catch((_error) => {
+  // Rename 'error' to '_error'
+
+  console.error("Something went wrong");
+  res.status(500).json({ message: "Server error" });
 });
 
 // OR if it's in middleware like this:
-app.use((error, req, res, next) => { // Original line
-    console.error("Unhandled error:", error.stack); // Using 'error' here
-    res.status(500).send('Something broke!');
+app.use((error, req, res, next) => {
+  // Original line
+  console.error("Unhandled error:", error.stack); // Using 'error' here
+  res.status(500).send("Something broke!");
 });
 // If 'error' *is* used (like above), the lint error shouldn't occur.
 // If 'error' is NOT used, like this:
-app.use((error, req, res, next) => { // Original line
-    console.error("An error occurred!"); // Not using 'error' variable
-    res.status(500).send('Something broke!');
+app.use((error, req, res, next) => {
+  // Original line
+  console.error("An error occurred!"); // Not using 'error' variable
+  res.status(500).send("Something broke!");
 });
 // Change it to:
-app.use((_error, req, res, next) => { // Rename 'error' to '_error'
-    console.error("An error occurred!");
-    res.status(500).send('Something broke!');
+app.use((_error, req, res, next) => {
+  // Rename 'error' to '_error'
+  console.error("An error occurred!");
+  res.status(500).send("Something broke!");
 });
-
+// ... TO HERE
 
 module.exports = router;
