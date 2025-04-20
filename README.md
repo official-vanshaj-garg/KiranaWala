@@ -1,4 +1,4 @@
-# KiranaWala - Online Grocery Management System
+![image](https://github.com/user-attachments/assets/8b489828-f6c8-4591-8870-1258bbacd1ea)# KiranaWala - Online Grocery Management System
 
 KiranaWala is a web-based platform connecting local store owners with customers for convenient online grocery shopping.
 
@@ -55,40 +55,54 @@ KiranaWala is a web-based platform connecting local store owners with customers 
 ## Project Structure
 ```
 KiranaWala/
-│── node_modules/
-│── public/
-│   ├── css/
-│   │   ├── styles.css
-│   ├── images/
-│   │   ├── auth/
-│   │   ├── store-background.jpg
-│   ├── js/
+├── .github
+│   └── workflows
+│       ├── lint.yml
+│       └── node.js.yml
+├── public
+│   ├── css
+│   │   └── styles.css
+│   ├── images
+│   │   └── auth
+│   │       └── store-background.jpg
+│   ├── js
 │   │   ├── customer.js
-│   │   ├── store-owner.js
 │   │   ├── store-owner-dashboard.js
-│── server/
-│   ├── models/
+│   │   └── store-owner.js
+│   ├── .dockerignore
+│   └── Dockerfile
+├── server
+│   ├── __tests__
+│   ├── models
 │   │   ├── product.js
 │   │   ├── store.js
 │   │   ├── storeOwner.js
-│   │   ├── user.js
-│   ├── routes/
+│   │   └── user.js
+│   ├── node_modules
+│   ├── routes
 │   │   ├── customerRoutes.js
-│   │   ├── storeRoutes.js
-│   │   ├── server.js
-│── views/
-│   ├── customer/
-│   │   ├── dashboard.html
-│   │   ├── login.html
-│   │   ├── register.html
-│   ├── store-owner/
-│   │   ├── dashboard.html
-│   │   ├── login.html
-│   │   ├── register.html
-│   │   ├── index.html
-│── .env
-│── package.json
-│── README.md
+│   │   └── storeRoutes.js
+│   ├── .dockerignore
+│   ├── .env
+│   ├── Dockerfile
+│   ├── eslint.config.mjs
+│   ├── package-lock.json
+│   ├── package.json
+│   └── server.js
+├── views
+│   ├── customer
+│   └── store-owner
+│       ├── dashboard.html
+│       ├── login.html
+│       └── register.html
+│   └── index.html
+├── .gitignore
+├── docker-compose.yml
+├── package-lock.json
+├── package.json
+└── README.md
+
+
 ```
 
 ## API Endpoints
