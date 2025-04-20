@@ -19,7 +19,7 @@ app.use(express.static(path.join(__dirname, "../views")));
 // MongoDB Connection
 // Now process.env.MONGODB_URI should be correctly loaded from e:\KiranaWala\server\.env
 mongoose
-  .connect(process.env.MONGODB_URI, {
+  .connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
@@ -68,7 +68,12 @@ app.get("/customer/products", (req, res) => {
   res.sendFile(path.join(__dirname, "../views/customer/products.html"));
 });
 
+// Add this route just before app.listen
+app.get("/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
 const PORT = process.env.PORT || 3000; // Already using process.env here, which is good
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
