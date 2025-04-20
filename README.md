@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/8b489828-f6c8-4591-8870-1258bbacd1ea)# KiranaWala - Online Grocery Management System
+# KiranaWala - Online Grocery Management System
 
 KiranaWala is a web-based platform connecting local store owners with customers for convenient online grocery shopping.
 
