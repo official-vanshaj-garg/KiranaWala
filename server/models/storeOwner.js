@@ -67,4 +67,6 @@ storeOwnerSchema.methods.comparePassword = async function (candidatePassword) {
 };
 // --- End of added code ---
 
+const StoreOwner = mongoose.model("StoreOwner", storeOwnerSchema);
+
 module.exports = mongoose.model("StoreOwner", storeOwnerSchema);
