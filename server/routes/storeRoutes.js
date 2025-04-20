@@ -82,7 +82,7 @@ router.post("/login", async (req, res) => {
     });
 
     res.json({ token, storeId: storeOwner._id });
-  } catch (error) {
+  } catch {
     res.status(500).json({ message: "Server error" });
   }
 });
