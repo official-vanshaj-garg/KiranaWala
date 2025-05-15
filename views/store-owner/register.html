@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <div class="container">
+    <div class="auth-bg">
         <div class="auth-container">
             <h2>Store Owner Registration</h2>
             <form id="registerForm">
@@ -23,14 +23,13 @@
                     <option value="Fashion">Fashion</option>
                     <option value="Home & Living">Home & Living</option>
                 </select>
-                <button type="submit">Register Store</button>
+                <button type="submit" class="auth-btn">Register Store</button>
             </form>
             <div class="auth-links">
                 <p>Already have a store? <a href="/store-owner/login">Login here</a></p>
             </div>
         </div>
     </div>
-
     <script>
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
