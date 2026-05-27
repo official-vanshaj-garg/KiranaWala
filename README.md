@@ -135,7 +135,6 @@ KiranaWala/
 
 ## Contact
 
-Jaineesh - pateljaineesh73@gmail.com
+Vanshaj - official.vanshaj.garg@gmail.com
 
-Project Link: [https://github.com/jaineeshx/KiranaWala]
 
